@@ -148,3 +148,91 @@ terremotos <- terremotos |>
   select(-"Error de Profundidad")
 ```
 
+
+
+##3. Análisis de Datos y Visualización: (39pts) 
+
+En esta sección se utilizarán diversas técnicas de análisis de datos para explorar el conjunto de datos, usando paquetes como gt, ggplot2, plotly y leaflet. A continuación se describen los pasos necesarios: 
+
+
+# 3.1 Hacer un pequeño análisis sobre variación para la variable magnitud. Puede usar ggplot2 o plotly, así como lo aprendido en el cuatrimestre pasado (8pts)
+
+Un par de funciones que funcionan muy bien para iniciar a explorar nuestros datos
+son glimpse de dplyr, y summary de R base.
+
+```{r}
+glimpse(terremotos_magnitud) # muestra que magnitud es una variable numérica o continua y además, que hay 23.416 observaciones.
+```
+
+```{r}
+summary(terremotos_magnitud $ Magnitud ) # permite visualizar estadisticas macro de la variable magnitud específicamente.
+```
+
+Ahora, podemos hacer gráfico para visualizar la distribución de los terremotos en estudio según su Magnitud (variable continua):
+
+```{r}
+# creamos un histograma para graficar la Magnitud como variable cuantitativa continua:
+histograma_magnitud <- ggplot(data = terremotos_magnitud) + geom_histogram(mapping = aes(x = Magnitud), fill = "#bcbd22", binwidth = 0.5) + 
+  labs( title = "Distribución de terremotos según su Magnitud", 
+        caption = "Fuente: datos terremotos_magnitud", 
+        x = "Magnitud", 
+        y = "Cantidad de terremotos") + scale_x_continuous(breaks = seq(5.25, 9.25, by = 0.5))+ 
+  theme_dark()
+
+ggplotly(histograma_magnitud) # para dar interactividad al gráfico.
+```
+
+```{r}
+# para saber la cantidad exacta de terremotos en cada rango de Magnitud:
+terremotos_magnitud |> count(cut_width(Magnitud, 0.5))
+```
+
+Según el gráfico y la información anterior, se puede observar que la mayor cantidad de terremotos se concentra en el primer rango de Magnitud, que va de (5.25,5.75] e incluye a 11.756 terremotos. Mientras que la menor cantidad de terremotos en estudio se ubican en el último rango de Magnitud, es decir, son solamente 3 terremotos que corresponden a los  de mayor Magnitud (8.75,9.25]. Además, podemos concluir de manera general que, conforme aumenta la Magnitud disminuye la cantidad de terremotos.
+
+Por otra parte, tambien podríamos visualizar la misma información pero en un gráfico de líneas o polígonos de frecuencia y agregando la variable de "Tipo de Magnitud" para obtener un mayor detalle de la distribución de los terremotos según esta otra variable:
+
+```{r}
+poligono_magnitud <- ggplot(data = terremotos_magnitud, mapping = aes(x = Magnitud, colour = `Tipo de Magnitud`)) +
+  geom_freqpoly(binwidth = 0.5)+
+  
+  labs( title = "Distribución de terremotos según su Magnitud y su Tipo de Magnitud", 
+        caption = "Fuente: datos terremotos_magnitud", 
+        x = "Magnitud", 
+        y = "Cantidad de terremotos") + scale_x_continuous(breaks = seq(5.25, 9.25, by = 0.5))+ 
+  theme_bw()
+
+ggplotly(poligono_magnitud) # para dar interactividad al gráfico.
+```
+
+En este último gráfico se usan líneas en lugar de barras para mostrar los totales. Es mucho más fácil entender líneas que barras que se sobreponen como en este caso. Podemos observar, al igual que en el primer histograma, que en general, conforme aumenta la Magnitud disminuye la cantidad de terremotos y también que los terremotos más frecuentes son aquellos cuyo Tipo de Magnitud es MW.
+
+
+
+# 3.2 Haga un pequeño análisis sobre variación para la variable Tipo. Puede usar ggplot2 o plotly, así como lo aprendido en el cuatrimestre pasado. (8pts)
+
+```{r}
+glimpse(terremotos_profundidad) # muestra que Tipo es una variable tipo caracter o categórica y además, que hay 23.414 observaciones.
+```
+
+```{r}
+# Hacemos un gráfico de barras horizontales para visualizar la distribución de los terremotos según su Tipo:
+
+barras_tipo <- ggplot(data = terremotos_profundidad) +
+geom_bar(mapping = aes(y = Tipo), fill = "#17becf")+
+labs(
+title = "Distribución de los terremotos según su Tipo",
+caption = "Fuente: datos terremotos_profundidad",
+x = "Cantidad de terremotos", y = "") +
+theme_dark()
+
+ggplotly(barras_tipo) # para dar interactividad al gráfico.
+```
+
+```{r}
+# para saber la cantidad exacta de terremotos en cada categoría de Tipo:
+terremotos_profundidad |>
+count(Tipo) |>
+arrange(desc(n)) 
+```
+
+Con base en el gráfico y la información anterior podemos ver que la mayoría de terremotos en estudio son de tipo Earthquake (23232 terremotos), mientras que la minoría corresponde a terremotos del Tipo Rock Burst (solamente 1 terremoto).
