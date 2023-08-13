@@ -104,8 +104,8 @@ filas_duplicadas2 <- terremotos_profundidad |>
 #al parecer no hay filas duplicadas
 ```
 
-2.4 Transformación de los tipos de variables:
-Transformar a tipo fecha:
+2.4 Transformación de los tipos de variables: para el conjunto de datos terremotos_profundidad use lubridate para transformar la fecha de carácter a un objetivo tipo fecha (2pts) 
+
 ```{r}
 terremotos_profundidad <- terremotos_profundidad |> 
   mutate(Fecha = mdy(Fecha))
@@ -113,7 +113,7 @@ terremotos_profundidad <- terremotos_profundidad |>
 glimpse(terremotos_profundidad)
 ```
 
-2.5 Mutate para unificar Type:
+ 2.5 Transformación de datos: para el conjunto de datos terremotos_profundidad examine cuáles son los valores distintos que hay en la variable “Type” o tipo. Use mutate para unificar valores si es necesario (4pts)
 ```{r}
 terremotos_profundidad |> 
   distinct(Tipo)
@@ -236,3 +236,29 @@ arrange(desc(n))
 ```
 
 Con base en el gráfico y la información anterior podemos ver que la mayoría de terremotos en estudio son de tipo Earthquake (23232 terremotos), mientras que la minoría corresponde a terremotos del Tipo Rock Burst (solamente 1 terremoto).
+
+3.3 Filtre los datos de los terremotos para obtener solamente aquellos que se hayan dado entre las coordenadas de latitud 8 y 11 Norte con Longitud entre -85 y -82 Oeste. Estos son los movimiento telúricos que se dieron en Costa Rica. Cuántos fueron? (3pts)
+
+```{r}
+terremotos_cr <- terremotos |> 
+  filter(Latitud >= 8 & Latitud <= 11,
+         Longitud >= -85 & Longitud <= -82) 
+ 
+ terremotos_cr |> 
+    count()
+ 
+ #Fueron 65 terremotos que se sieron en Costa Rica
+```
+
+ 3.4 Filtre los datos de terremotos de Costa Rica para obtener los 10 terremotos con magnitud más altas en Costa Rica. Muestre estos datos en una tabla de gt que muestre el mes, año, latitud, longitud, magnitud y profundidad del terremoto. A esta tabla añada título, subtítulo, y al menos un pie de tabla (10pts)
+ 
+```{r}
+terremotoscr_magn_altas <- terremotos_cr|>
+  select(c(mes,anio,Latitud,Longitud,Magnitud,Profundidad)) |> 
+  arrange(desc(Magnitud)) |> 
+  head(10)
+
+terremotoscr_magn_altas
+```
+ 
+ 
