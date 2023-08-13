@@ -122,3 +122,29 @@ terremotos_profundidad<-terremotos_profundidad |>
     mutate(across(Tipo, function(x) ifelse(x == "nuclear explosion", "Nuclear Explosion", x))) |> 
     mutate(across(Tipo, function(x) ifelse(x == "earthquake", "Earthquake", x)))
 ```
+
+2.6 Creación de columnas adicionales: para el conjunto de datos terremotos_profundidad cree 2 nuevas columnas: una que contenga el mes del terremoto, y otra que contenga el año del terremoto (4pts)
+
+```{r}
+terremotos_profundidad <- terremotos_profundidad |> 
+  mutate(mes=month(Fecha)) |> 
+  mutate(anio=year(Fecha))
+```
+
+2.7 Unir ambos conjuntos de datos en un solo conjunto de datos llamado datos_terremotos. Para esto 
+use un left_join o un right_join, la llave que une ambos datasets es la columna llamada ID en los conjuntos de datos originales. (2pts) 
+
+```{r}
+terremotos_profundidad <- terremotos_profundidad |> 
+  select(-...1)
+terremotos<-left_join(terremotos_profundidad,terremotos_magnitud,
+                      by = c("ID"))
+```
+
+2.8 Eliminar columnas vacías e innecesarias: Elimine aquellas columnas vacías o que no están aportando ninguna información. (2pts)
+
+```{r}
+terremotos <- terremotos |> 
+  select(-"Error de Profundidad")
+```
+
