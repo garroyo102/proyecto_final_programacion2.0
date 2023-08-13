@@ -93,3 +93,32 @@ terremotos_magnitud <- terremotos_magnitud |>
 glimpse(terremotos_magnitud)
 View(terremotos_magnitud)
 ```
+
+2.3 Eliminación de filas dupilicadas(si existe)
+```{r}
+filas_duplicadas1 <- terremotos_magnitud |>  
+  janitor::get_dupes() 
+
+filas_duplicadas2 <- terremotos_profundidad |>  
+  janitor::get_dupes()
+#al parecer no hay filas duplicadas
+```
+
+2.4 Transformación de los tipos de variables:
+Transformar a tipo fecha:
+```{r}
+terremotos_profundidad <- terremotos_profundidad |> 
+  mutate(Fecha = mdy(Fecha))
+
+glimpse(terremotos_profundidad)
+```
+
+2.5 Mutate para unificar Type:
+```{r}
+terremotos_profundidad |> 
+  distinct(Tipo)
+
+terremotos_profundidad<-terremotos_profundidad |> 
+    mutate(across(Tipo, function(x) ifelse(x == "nuclear explosion", "Nuclear Explosion", x))) |> 
+    mutate(across(Tipo, function(x) ifelse(x == "earthquake", "Earthquake", x)))
+```
