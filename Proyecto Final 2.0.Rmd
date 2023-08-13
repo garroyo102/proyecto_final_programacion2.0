@@ -259,6 +259,38 @@ terremotoscr_magn_altas <- terremotos_cr|>
   head(10)
 
 terremotoscr_magn_altas
+
+terr_cr_magn_altas_gt <- terremotoscr_magn_altas|>  
+  gt() |> 
+  tab_header(
+    title = "Movimientos telúricos en Costa Rica",
+    subtitle = "Diez terremotos con magnitudes más altas en Costa Rica" 
+  ) |> 
+  tab_footnote(
+    footnote = "El terremoto de Limón causó daños en un área de 8 000 km2, que incluyó el 80% del territorio costarricense y el 20% del de Panamá.", 
+    locations = cells_body(columns = anio, rows = 1)) |> 
+  tab_footnote(
+    footnote = " Ocurrieron otros 20 sismos con magnitudes de entre 3,2 y 4,6.",
+    locations = cells_body(columns = anio,rows = 9)
+  )
+
+terr_cr_magn_altas_gt
+
 ```
  
+3.5 Muestre los 10 terremotos con mayor magnitud obtenidos anteriormente en un mapa de leaflet. Como popup coloque el año del terremoto. (10pts)
+ 
+```{r}
+terremotoscr_magn_altas<- terremotoscr_magn_altas |> 
+  mutate(anio = as.character(anio))
+
+mapa <-terremotoscr_magn_altas |> 
+  leaflet() |>
+  addTiles() |>
+  addMarkers(data =terremotoscr_magn_altas,
+             lng = ~Longitud,
+             lat = ~Latitud,
+             popup = ~anio)
+mapa
+```
  
