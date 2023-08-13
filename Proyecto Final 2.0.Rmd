@@ -1,0 +1,95 @@
+---
+title: "Proyecto Final"
+author: "Gabriela Alvarez, Gabriela Arroyo y Susana Meoño"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+## 1. Configuración de Git y Github: (15 pts) 
+
+
+## 2. Preparación y limpieza de Datos: (22pts) 
+
+En el chunk de setup cargamos las librerías que consideremos necesarias para resolver llos ejercicios:
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(dplyr)
+library(datasets)
+library(datos)
+library(readr) #lectura y carga de datos
+library(readxl)
+library(tidyr)# doma de datos
+library(janitor) #limpieza de datos
+library(lubridate)
+library(hms)
+library(stringr)
+library(gt)
+library(tinytex)
+library(writexl) # para guardar datos como excel
+library(utils)
+library(leaflet)
+library(ggplot2)
+library(plotly)
+library(utils)
+```
+
+En este proyecto trabajaremos con 2 conjuntos de datos sobre terremotos relacionados entre sí por medio de la columna ID. 
+El conjunto de datos muestra datos reportados para aquellos movimientos telúricos con una magNitud mayor a 5.5 desde 1965 hasta el 2016. 
+Para cada uno de estos conjuntos de datos, use algunas de las técnicas aprendidas sobre preparación y limpieza de datos para: 
+
+## 2.1 Realiza la lectura de los datos en R (2pts) 
+
+```{r}
+terremotos_profundidad <- read_csv("https://raw.githubusercontent.com/isa229/programacion_analisis_datos_ii/main/terremotos_profundidad.csv") #Lee los datos de csv y los carga a R
+glimpse(terremotos_profundidad)
+View(terremotos_profundidad)
+```
+
+```{r}
+terremotos_magnitud <- read_csv("https://raw.githubusercontent.com/isa229/programacion_analisis_datos_ii/main/terremotos_magnitud.csv") #Lee los datos de csv y los carga a R
+glimpse(terremotos_magnitud)
+View(terremotos_magnitud)
+```
+
+# 2.2 Limpiar nombre de las variables (traducir al español) (4pts)
+
+```{r}
+# Primero limpiamos los nombres de las variables de cada DF
+clean_names(terremotos_profundidad)
+View(terremotos_profundidad)
+```
+
+```{r}
+clean_names(terremotos_magnitud)
+View(terremotos_magnitud)
+```
+
+```{r}
+# Luego traducimos las variables a español para cada DF
+terremotos_profundidad <- terremotos_profundidad |> 
+  rename("Fecha" = "Date",
+         "Hora" = "Time",
+         "Latitud" = "Latitude", 
+         "Longitud" = "Longitude",
+         "Tipo" = "Type",
+         "Profundidad" = "Depth",
+         "Error de Profundidad" = "Depth Error",
+         "ID" = "ID")
+
+# Usamos glimpse o view para ver que las columnas fueron renombradas adecuadamente:
+glimpse(terremotos_profundidad)
+View(terremotos_profundidad)
+```
+ 
+```{r}
+# Traducimos las variables a español para cada DF
+terremotos_magnitud <- terremotos_magnitud |> 
+  rename("ID" = "ID",
+         "Magnitud" = "Magnitude",
+         "Tipo de Magnitud" = "Magnitude Type")
+
+# Usamos glimpse o view para ver que las columnas fueron renombradas adecuadamente:
+glimpse(terremotos_magnitud)
+View(terremotos_magnitud)
+```
